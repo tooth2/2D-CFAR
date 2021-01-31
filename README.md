@@ -11,17 +11,14 @@ Max Range and Range Resolution will be considered here for waveform design.
 
 The sweep bandwidth can be determined according to the range resolution and the sweep slope is calculated using both sweep bandwidth and sweep time.
 
-Bandwidth (B_{sweep}) = speed \,\, of\,\, light/(2*rangeResolution)Bandwidth(B 
-sweep
-​	 )=speedoflight/(2∗rangeResolution)
+> Bandwidth (B_{sweep}) = speedoflight/(2∗rangeResolution)
 
 The sweep time can be computed based on the time needed for the signal to travel the unambiguous maximum range. In general, for an FMCW radar system, the sweep time should be at least 5 to 6 times the round trip time. This example uses a factor of 5.5.
 
-> chirp time (Tchirp) =5.5⋅2⋅R_max/c
+> chirp time (Tchirp) =5.5⋅2⋅R_max/speedoflight
 
 Giving the slope of the chirp signal
 > slope of the chirp  = Bandwidth/T_chirp
-
 
 
 ## 1D FFT (1st order FFT)
