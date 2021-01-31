@@ -2,24 +2,34 @@
 2D FFT, Doppler effect and CFAR implementation with matlab
 
 ## FMCW Waveform Design
-FMCW waveform. 
+FMCW waveform specification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Frequency of operation = 77GHz
+% Max Range = 200m
+% Range Resolution = 1 m
+% Max Velocity = 100 m/s
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%  the target's initial position and velocity. Note : Velocity remains contant initial range:max value of 200m and velocity: [-70 to + 70 m/s]
+* target_range = 100;
+* target_velocity = 35;
+
 * Bandwidth (B)
 * chirp time (Tchirp) 
-* slope of the chirp = 2.0455e+13
-
+* speed of light = 3.0e+8
 Max Range and Range Resolution will be considered here for waveform design.
 
 The sweep bandwidth can be determined according to the range resolution and the sweep slope is calculated using both sweep bandwidth and sweep time.
 
-> Bandwidth (B_{sweep}) = speedoflight/(2∗rangeResolution)
+> Bandwidth (B) = SpeedOfLight/(2∗rangeResolution)
 
 The sweep time can be computed based on the time needed for the signal to travel the unambiguous maximum range. In general, for an FMCW radar system, the sweep time should be at least 5 to 6 times the round trip time. This example uses a factor of 5.5.
 
-> chirp time (Tchirp) =5.5⋅2⋅R_max/speedoflight
+> chirp time (Tchirp) =5.5⋅2⋅R_max/SpeedOfLight
 
 Giving the slope of the chirp signal
-> slope of the chirp  = Bandwidth/T_chirp
-
+> slope of the chirp  = Bandwidth(B)/T_chirp
+> slope = 2.0455e+13 % result
 
 ## 1D FFT (1st order FFT)
 Implement the Range FFT on the Beat or **Mixed Signal** and plot the result.
