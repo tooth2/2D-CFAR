@@ -14,7 +14,6 @@ The sensor fusion design for different driving scenarios requires different syst
 |Range_Resolution | 1 m |
 |Max_Velocity |100 m/s |
 
-
 ### Target's initial position and velocity 
 Velocity remains contant initial range:max value of 200m and velocity: [-70 to + 70 m/s]
 * target_range = 110
@@ -38,19 +37,20 @@ Giving the slope of the chirp signal
 > slope of the chirp  = Bandwidth(B)/T_chirp
 > slope = 2.0455e+13 % result
 
-## 1D FFT (1st order FFT)
+## 1D FFT
 Implement the Range FFT on the Beat or **Mixed Signal** and plot the result.
 generate a peak at the correct range, i.e the initial position of target assigned with an error margin of +/- 10 meters.
+
 **Mixed Signal**: The beat signal can be calculated by multiplying the Transmit signal with Receive signal. This process in turn works as frequency subtraction. It is implemented by element by element multiplication of transmit and receive signal matrices.
 ![Result](1DFFT.png)
-
-## 2D FFT (2nd order FFT)
+The reuslt shows the beat signal is detected on x=111, which is 1meter over from target range 110  
+## 2D FFT
 ![Result2](2DFFT.png)
-
-## Simulation Loop 
+The reuslt shows the beat signal is detected on (x=110, y=-18) which is 1 meter over from target range 110 and 2 m/s over from target velocy -20m/s
+## CFAR Simulation Loop 
 Simulate Target movement and calculate the beat or mixed signal for every timestamp
-A beat signal should be generated such that once range FFT implemented, it gives the correct range i.e the initial position of target assigned with an error margin of +/- 10 meters.
-
+![Result3](CFAR.png)
+when offset=1.4, RDM shows The beat signal is detected in the range = 109~111 and velocity =-16~-18 in which the initial position of target is assigned within error margin(+/- 10meters). It simulates correct range. 
 ## Implementation steps for the 2D CFAR process
 ### What is CFAR? 
 Technically, Cell Averaging CFAR (CA-CFAR)method; CA-CFAR is the most commonly used CFAR detection technique. CFAR varies the detection threshold based on the vehicle surroundings. The CFAR technique estimates the level of interference in radar range and doppler cells “Training Cells” on either or both the side of the “Cell Under Test”. The estimate is then used to decide if the target is in the Cell Under Test (CUT).
@@ -59,8 +59,6 @@ The process loops across all the range cells and decides the presence of target 
 Implement the 2D CFAR process on the output of 2D FFT operation, i.e the Range Doppler Map.
 The 2D CFAR processing should be able to suppress the noise and separate the target signal
 The 2D CA-CFAR implementation involves the training cells occupying the cells surrounding the cell under test with a guard grid in between to prevent the impact of a target signal on the noise estimate.
-
-
 
 1. Determine the number of Training cells for each dimension Tr and Td. Similarly, pick the number of guard cells Gr and Gd.
     * Tr : Number of Training Cells = 8 
@@ -73,13 +71,24 @@ The 2D CA-CFAR implementation involves the training cells occupying the cells su
 5. This gives the Training Cells : (2Tr+2Gr+1)(2Td+2Gd+1) - (2Gr+1)(2Gd+1)
 6. Measure and average the noise across all the training cells. This gives the threshold
 7. Add the offset (if in signal strength in dB) to the threshold to keep the false alarm to the minimum.
-    * offset: Adding room above noise threshold for desired SNR 
+    * offset=1.4: Adding room above noise threshold for desired SNR 
 8. Determine the signal level at the Cell Under Test.
 9. If the CUT signal level is greater than the Threshold, assign a value of 1, else equate it to zero.
 10. Since the cell under test are not located at the edges, due to the training cells occupying the edges, we suppress the edges to zero. Any cell value that is neither 1 nor a 0, assign it a zero.
 
 
 ## Selection of Training, Guard cells and offset.
+Offset is adjusted to see whethe the beat signal is detected within the error magrin(+/- 10 meters) from the target range(110m). offset=1.4 shows the best accuracy to meet target range(110m) and target velocity(-20m/2) compare to offset=1.3 or offset=1.5.
 
 ## suppress the non-thresholded cells at the edges.
-2D CFAR suppress the noise and separate the target signal
+2D CFAR suppress the noise and separate the target signal: Since the cell under test are not located at the edges, due to the training cells occupying the edges, we suppress the edges to zero. Any cell value that is neither 1 nor a 0, assign it a zero.
+```code
+RDM(RDM~=0 & RDM~=1) = 0;
+```
+## Reference 
+* [FMCW Radar](https://www.radartutorial.eu/02.basics/Frequency%20Modulated%20Continuous%20Wave%20Radar.en.html)
+* [FAR](https://www.radartutorial.eu/01.basics/False%20Alarm%20Rate.en.html)
+* [Radar Sliding Window Detector](https://arxiv.org/pdf/1709.09786.pdf)
+* [2D FFT](https://www.mathworks.com/help/matlab/ref/fft2.html)
+* [2D CFAR](https://www.mathworks.com/help/phased/ref/phased.cfardetector2d.step.html)
+
