@@ -50,9 +50,9 @@ The reuslt shows the beat signal is detected on (x=110, y=-18) which is 1 meter 
 ## CFAR Simulation Loop 
 Simulate Target movement and calculate the beat or mixed signal for every timestamp
 ![Result3](CFAR.png)
-when offset=1.4, RDM shows The beat signal is detected in the range =(109~111) and velocity = (-16~-18) in which the initial position of target is assigned within error margin(+/- 10meters). It simulates correct range. 
+when offset=1.4, RDM shows The beat signal is detected in the range =(107 ~ 109) and velocity = (-16 ~ -20) in which the initial position of target is assigned within error margin(+/- 10meters). It simulates correct range. 
 
-<img src = "CFAR_offset14Peak.png" width =500 /> <img src="CFAR_offset14Peak2.png" width=500 />
+<img src = "CFAR_offset14Peak.png" width =400 /> <img src="CFAR_offset14Peak2.png" width=400 />
 ## Implementation steps for the 2D CFAR process
 ### What is CFAR? 
 Technically, Cell Averaging CFAR (CA-CFAR)method; CA-CFAR is the most commonly used CFAR detection technique. CFAR varies the detection threshold based on the vehicle surroundings. The CFAR technique estimates the level of interference in radar range and doppler cells “Training Cells” on either or both the side of the “Cell Under Test”. The estimate is then used to decide if the target is in the Cell Under Test (CUT).
